@@ -1,0 +1,10 @@
+services:
+  - type: cron
+    name: screenshot-job
+    runtime: node
+    schedule: "0 * * * *"
+    buildCommand: npm install
+    startCommand: node screenshot.js
+    envVars:
+      - key: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
+        value: "false"
