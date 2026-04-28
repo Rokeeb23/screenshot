@@ -1,0 +1,11 @@
+{
+  "name": "testimonial-screenshot",
+  "version": "1.0.0",
+  "main": "screenshot.js",
+  "scripts": {
+    "start": "node screenshot.js"
+  },
+  "dependencies": {
+    "puppeteer": "^22.0.0"
+  }
+}
