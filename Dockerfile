@@ -1,6 +1,5 @@
 FROM node:20-slim
 
-# Install Chrome for Puppeteer
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
