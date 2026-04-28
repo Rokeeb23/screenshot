@@ -15,7 +15,10 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 COPY package.json .
-RUN npm install
+
+# Add a timestamp to bust cache
+ARG CACHEBUST=1
+RUN echo "Cache bust: $CACHEBUST" && npm install && ls -la node_modules | head -20
 
 COPY screenshot.js .
 
