@@ -1,6 +1,6 @@
 FROM node:20-slim
 
-# Install Chrome and Puppeteer dependencies
+# Install Chrome dependencies
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
@@ -10,15 +10,18 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y google-chrome-stable \
     && apt-get clean
 
-# Install Puppeteer globally (bypasses package.json)
-RUN npm install -g puppeteer
-
 WORKDIR /app
 
-# Copy only the script
+# Create package.json first
+RUN echo '{"name":"screenshot","version":"1.0.0","dependencies":{"puppeteer":"22.0.0"}}' > package.json
+
+# Install dependencies
+RUN npm install
+
+# Copy your script
 COPY screenshot.js .
 
-# Set Puppeteer to use system Chrome
+# Tell puppeteer where Chrome is
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 
 CMD ["node", "screenshot.js"]
