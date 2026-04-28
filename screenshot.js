@@ -117,10 +117,25 @@ async function takeScreenshot() {
     
     // Step 2: Launch browser
     console.log('\n🌐 STEP 2: Launching browser...');
-    const browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+    console.log('   Checking Chrome path...');
+    console.log('   PUPPETEER_EXECUTABLE_PATH:', process.env.PUPPETEER_EXECUTABLE_PATH);
+    
+    let browser;
+    try {
+        browser = await puppeteer.launch({
+            headless: true,
+            args: [
+                '--no-sandbox', 
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu'
+            ]
+        });
+        console.log('   ✅ Browser launched successfully');
+    } catch (error) {
+        console.error(`   ❌ Failed to launch browser: ${error.message}`);
+        process.exit(1);
+    }
     
     try {
         const page = await browser.newPage();
@@ -170,12 +185,14 @@ async function takeScreenshot() {
         
         if (response.status === 'success') {
             console.log(`\n✨ SUCCESS!`);
-            console.log(`   📸 Screenshot saved: ${response.screenshot.file}`);
-            console.log(`   📄 JSON saved: ${response.json.file}`);
-            console.log(`   🗑️ Deleted ${response.deleted_previous.screenshots} previous screenshot(s)`);
-            console.log(`   👤 Username: ${response.testimonial.username}`);
+            console.log(`   📸 Screenshot saved: ${response.screenshot?.file || filename}`);
+            console.log(`   📄 JSON saved: ${response.json?.file || 'unknown'}`);
+            if (response.deleted_previous) {
+                console.log(`   🗑️ Deleted ${response.deleted_previous.screenshots || 0} previous screenshot(s)`);
+            }
+            console.log(`   👤 Username: ${response.testimonial?.username || testimonialData.username}`);
         } else {
-            console.log(`\n⚠️ Warning: ${response.message}`);
+            console.log(`\n⚠️ Warning: ${response.message || 'Unknown error'}`);
         }
         
         console.log('\n' + '='.repeat(50));
@@ -186,6 +203,7 @@ async function takeScreenshot() {
         process.exit(1);
     } finally {
         await browser.close();
+        console.log('   Browser closed');
     }
 }
 
