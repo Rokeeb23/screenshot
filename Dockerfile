@@ -1,6 +1,5 @@
 FROM node:20-slim
 
-# Install Chrome dependencies + Chrome
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
@@ -15,12 +14,12 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
+COPY package.json .
+RUN npm install
+
 COPY screenshot.js .
 
-# Install puppeteer LOCALLY (not -g), skip bundled Chromium since we have Chrome
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
-
-RUN npm init -y && npm install puppeteer
 
 CMD ["node", "screenshot.js"]
