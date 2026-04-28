@@ -56,12 +56,9 @@ async function sendToAPI(filename, screenshotBuffer, testimonialData) {
     return new Promise((resolve, reject) => {
         const base64Data = screenshotBuffer.toString('base64');
         const postData = JSON.stringify({
-            // Screenshot data
             screenshot: base64Data,
             filename: filename,
             screenshot_taken_at: new Date().toISOString(),
-            
-            // Testimonial post data (from get_random_testimonial.php)
             post_id: testimonialData.post_id,
             username: testimonialData.username,
             content: testimonialData.content || '',
@@ -108,7 +105,7 @@ async function takeScreenshot() {
     console.log('🚀 Starting screenshot job...');
     console.log('='.repeat(50));
     
-    // Step 1: Get random testimonial data (includes post_id, username, content, etc.)
+    // Step 1: Get random testimonial data
     console.log('\n📋 STEP 1: Getting random testimonial post...');
     let testimonialData;
     try {
@@ -164,7 +161,7 @@ async function takeScreenshot() {
         console.log(`✅ Screenshot taken: ${filename}`);
         console.log(`📊 Size: ${(screenshotBuffer.length / 1024).toFixed(2)} KB`);
         
-        // Step 5: Send to API with ALL testimonial data
+        // Step 5: Send to API
         console.log(`\n📤 STEP 5: Sending screenshot and testimonial data to API...`);
         console.log(`   Post ID: ${testimonialData.post_id}`);
         console.log(`   Username: ${testimonialData.username}`);
@@ -176,8 +173,6 @@ async function takeScreenshot() {
             console.log(`   📸 Screenshot saved: ${response.screenshot.file}`);
             console.log(`   📄 JSON saved: ${response.json.file}`);
             console.log(`   🗑️ Deleted ${response.deleted_previous.screenshots} previous screenshot(s)`);
-            console.log(`   🗑️ Deleted ${response.deleted_previous.json_files} previous JSON file(s)`);
-            console.log(`   🆔 Post ID: ${response.testimonial.post_id}`);
             console.log(`   👤 Username: ${response.testimonial.username}`);
         } else {
             console.log(`\n⚠️ Warning: ${response.message}`);
