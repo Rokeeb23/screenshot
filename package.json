@@ -1,12 +1,11 @@
 {
   "name": "screenshot-bot",
   "version": "1.0.0",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
+  "main": "screenshot.js",
   "dependencies": {
-    "puppeteer": "^22.0.0",
-    "express": "^4.18.2"
+    "puppeteer": "^22.0.0"
+  },
+  "scripts": {
+    "start": "node screenshot.js"
   }
 }
