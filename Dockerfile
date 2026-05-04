@@ -26,12 +26,10 @@ COPY package.json .
 ARG CACHEBUST=1
 RUN echo "Cache bust: $CACHEBUST" && npm install && ls -la node_modules | head -20
 
-# Copy both files now
-COPY screenshot.js server.js ./
+COPY screenshot.js .
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 ENV LANG=C.UTF-8
 
-# CHANGE: Run server.js instead of screenshot.js
-CMD ["node", "server.js"]
+CMD ["node", "screenshot.js"]
